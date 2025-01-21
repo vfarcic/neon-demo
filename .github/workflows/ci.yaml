@@ -5,7 +5,7 @@ on:
     types:
       - opened
       - reopened
-      - edited
+      - synchronize
 jobs:
   build-container-image:
     runs-on: ubuntu-latest
