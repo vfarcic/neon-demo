@@ -5,6 +5,7 @@ on:
     types:
       - opened
       - reopened
+      - edited
 jobs:
   build-container-image:
     runs-on: ubuntu-latest
