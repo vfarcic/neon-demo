@@ -12,13 +12,10 @@ jobs:
     env:
       FORCE_COLOR: 1
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v4
-      - name: "FIXME:"
-        run: |
-          ls -la
       - uses: neondatabase/create-branch-action@v5
-        id: Create Branch
+        id: create-branch
         with:
           project_id: super-darkness-76149530
           database: dot
