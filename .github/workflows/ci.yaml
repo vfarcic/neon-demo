@@ -20,8 +20,8 @@ jobs:
           project_id: super-darkness-76149530
           database: dot
           parent: main
-          branch_name: silly-demo
-          username: viktor
+          branch_name: silly-demo/${{ github.event.number }}
+          username: viktor@farcic.com
           api_key: ${{ secrets.NEON_API_KEY }}
       - run: echo db_url ${{ steps.create-branch.outputs.db_url }}
       - run: echo host ${{ steps.create-branch.outputs.host }}
