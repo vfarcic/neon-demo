@@ -1,7 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.13.7/.schema/devbox.schema.json",
   "packages": [
-    "postgresql@17.2"
+    "postgresql@17.2",
+    "yq-go@4.45.1"
   ],
   "shell": {
     "init_hook": [],
