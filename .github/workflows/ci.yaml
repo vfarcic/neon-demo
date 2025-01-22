@@ -19,6 +19,6 @@ jobs:
         with:
           project_id: super-darkness-76149530
           database: dot
-          branch_name: silly-demo-${{ github.event.number }}
+          branch_name: silly-demo
           username: viktor
           api_key: ${{ secrets.NEON_API_KEY }}
