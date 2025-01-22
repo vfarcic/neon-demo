@@ -7,13 +7,21 @@ on:
       - reopened
       - synchronize
 jobs:
-  build-container-image:
+  ci:
     runs-on: ubuntu-latest
     env:
       FORCE_COLOR: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: All
+      - name: "FIXME:"
         run: |
           ls -la
+      - uses: neondatabase/create-branch-action@v5
+        id: Create Branch
+        with:
+          project_id: super-darkness-76149530
+          database: dot
+          branch_name: silly-demo-${{ github.event.number }}
+          username: viktor
+          api_key: ${{ secrets.NEON_API_KEY }}
