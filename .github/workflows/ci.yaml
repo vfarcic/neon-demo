@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v4
       - uses: neondatabase/delete-branch-action@v3
         id: delete-branch
+        continue-on-error: true
         with:
           project_id: super-darkness-76149530
           branch: silly-demo/${{ github.event.number }}
