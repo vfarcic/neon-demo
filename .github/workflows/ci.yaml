@@ -28,16 +28,14 @@ jobs:
       #     password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: install-devbox
         uses: jetify-com/devbox-install-action@v0.12.0
-        with:
-          project-path: devbox-ci.json
       - name: run-unit-tests
-        run: devbox run --config devbox-ci.json -- ./dot.nu run unit_tests
+        run: devbox run -- ./dot.nu run unit_tests
       # - name: build-image
-      #   run: devbox run --config devbox-ci.json -- ./dot.nu build image $TAG
+      #   run: devbox run -- ./dot.nu build image $TAG
       #   env:
       #     REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       # - name: update-manifests
-      #   run: devbox run --config devbox-ci.json -- ./dot.nu update manifests $TAG
+      #   run: devbox run -- ./dot.nu update manifests $TAG
       #   env:
       #     COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
       #     COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
@@ -59,9 +57,9 @@ jobs:
           echo host: ${{ steps.create-neon-branch.outputs.host }}
           echo branch_id: ${{ steps.create-neon-branch.outputs.branch_id }}
       - name: deploy-app
-        run: devbox run --config devbox-ci.json -- ./dot.nu deploy app ${{ steps.create-neon-branch.outputs.db_url }}
+        run: devbox run -- ./dot.nu deploy app ${{ steps.create-neon-branch.outputs.db_url }}
       - name: run-integration-tests
-        run: devbox run --config devbox-ci.json -- ./dot.nu run integration_tests
+        run: devbox run -- ./dot.nu run integration_tests
       # - name: commit-changes
       #   run: |
       #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
