@@ -1,11 +1,14 @@
 name: ci
 run-name: ci
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
+  push:
+    branches:
+      - main
+  # pull_request:
+  #   types:
+  #     - opened
+  #     - reopened
+  #     - synchronize
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -14,22 +17,30 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - uses: neondatabase/delete-branch-action@v3
-        id: delete-branch
+      - name: delete-neon-branch
+        uses: neondatabase/delete-branch-action@v3
         continue-on-error: true
         with:
           project_id: super-darkness-76149530
           branch: silly-demo/${{ github.event.number }}
           api_key: ${{ secrets.NEON_API_KEY }}
-      - uses: neondatabase/create-branch-action@v5
-        id: create-branch
+      - name: create-neon-branch
+        uses: neondatabase/create-branch-action@v5
         with:
           project_id: super-darkness-76149530
-          database: dot
+          database: dot_neon
           parent: main
           branch_name: silly-demo/${{ github.event.number }}
           username: dot_owner
           api_key: ${{ secrets.NEON_API_KEY }}
+      - name: everything-else
+        run: |
+          kind create cluster
+          echo "Create a cluster"
+          echo "Deploy the app"
+          echo "Run some tests"
+          echo "Shut it all down (Neon will shut itself down)"
+          echo "Another video?"
       - name: branch-info
         run: |
           echo db_url: ${{ steps.create-branch.outputs.db_url }}

@@ -1,2 +1,4 @@
 /lego.sql
 /devbox.lock
+/kubeconfig*.yaml
+/.env
