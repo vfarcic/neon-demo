@@ -40,6 +40,13 @@ jobs:
       #     COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
       #     COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
       #     REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: delete-neon-branch
+        uses: neondatabase/delete-branch-action@v3
+        continue-on-error: true
+        with:
+          project_id: super-darkness-76149530
+          branch: silly-demo/${{ github.event.number }}
+          api_key: ${{ secrets.NEON_API_KEY }}
       - name: create-neon-branch
         uses: neondatabase/create-branch-action@v5
         with:
@@ -49,7 +56,6 @@ jobs:
           branch_name: silly-demo/${{ github.event.number }}
           username: dot_owner
           api_key: ${{ secrets.NEON_API_KEY }}
-        continue-on-error: true
       # FIXME: Remove
       - name: branch-info
         run: |
