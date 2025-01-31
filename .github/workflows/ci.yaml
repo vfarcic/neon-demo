@@ -48,6 +48,7 @@ jobs:
           branch: silly-demo/${{ github.event.number }}
           api_key: ${{ secrets.NEON_API_KEY }}
       - name: create-neon-branch
+        id: create-neon-branch
         uses: neondatabase/create-branch-action@v5
         with:
           project_id: super-darkness-76149530
