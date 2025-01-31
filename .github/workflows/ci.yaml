@@ -16,9 +16,9 @@ jobs:
       TAG: 0.0.${{ github.run_number }}
       FORCE_COLOR: 1
     steps:
-      - name: checkout
+      - id: checkout
         uses: actions/checkout@v4
-      - name: setup-qemu
+      - id: setup-qemu
         uses: docker/setup-qemu-action@v3
       # - name: login-to-ghcr
       #   uses: docker/login-action@v3
@@ -26,9 +26,9 @@ jobs:
       #     registry: ghcr.io
       #     username: vfarcic
       #     password: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: install-devbox
+      - id: install-devbox
         uses: jetify-com/devbox-install-action@v0.12.0
-      - name: run-unit-tests
+      - id: run-unit-tests
         run: devbox run -- ./dot.nu run unit_tests
       # - name: build-image
       #   run: devbox run -- ./dot.nu build image $TAG
@@ -40,15 +40,14 @@ jobs:
       #     COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
       #     COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
       #     REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: delete-neon-branch
+      - id: delete-neon-branch
         uses: neondatabase/delete-branch-action@v3
         continue-on-error: true
         with:
           project_id: super-darkness-76149530
           branch: silly-demo/${{ github.event.number }}
           api_key: ${{ secrets.NEON_API_KEY }}
-      - name: create-neon-branch
-        id: create-neon-branch
+      - id: create-neon-branch
         uses: neondatabase/create-branch-action@v5
         with:
           project_id: super-darkness-76149530
@@ -58,15 +57,15 @@ jobs:
           username: dot_owner
           api_key: ${{ secrets.NEON_API_KEY }}
       # FIXME: Remove
-      - name: branch-info
+      - id: branch-info
         run: |
           echo db_url: ${{ steps.create-neon-branch.outputs.db_url }}
           echo host: ${{ steps.create-neon-branch.outputs.host }}
           echo branch_id: ${{ steps.create-neon-branch.outputs.branch_id }}
-      - name: deploy-app
+      - id: deploy-app
         run: devbox run -- ./dot.nu deploy app ${{ steps.create-neon-branch.outputs.db_url }}
-      - name: run-integration-tests
-        run: devbox run -- ./dot.nu run integration_tests
+      - id: run-integration-tests
+        run: devbox run -- ./dot.nu run integration_tests ${{ steps.create-neon-branch.outputs.db_url }}
       # - name: commit-changes
       #   run: |
       #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"

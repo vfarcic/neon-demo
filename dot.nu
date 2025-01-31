@@ -71,6 +71,16 @@ def "main deploy app" [
 
 }
 
+def "main run integration_tests" [
+    neon_conn: string
+] {
+
+    $env.DB_CONN = $neon_conn
+    
+    go test -v -tags integration
+
+}
+
 # Signs the image
 def "sign image" [
     tag: string                    # The tag of the image (e.g., `0.0.1`)
