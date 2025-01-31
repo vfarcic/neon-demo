@@ -1,0 +1,21 @@
+name: pr-close
+run-name: pr-close
+on:
+  pull_request:
+    types:
+      - closed
+jobs:
+  pro-close:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_COLOR: 1
+    steps:
+      - id: checkout
+        uses: actions/checkout@v4
+      - id: delete-neon-branch
+        uses: neondatabase/delete-branch-action@v3
+        continue-on-error: true
+        with:
+          project_id: super-darkness-76149530
+          branch: silly-demo/${{ github.event.number }}
+          api_key: ${{ secrets.NEON_API_KEY }}
