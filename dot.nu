@@ -26,6 +26,16 @@ def "main setup" [] {
     
 }
 
+def "main destroy" [
+    --neon_db = "dot_neon"
+] {
+
+    main destroy kubernetes kind
+
+    neonctl databases delete $neon_db
+    
+}
+
 def "main run unit_tests" [] {
 
     go test -v -tags unit
@@ -88,21 +98,26 @@ def "main run integration_tests" [
 def "setup neon" [] {
 
     print $"
-(ansi yellow_bold)Sign Up(ansi reset) for a free Neon account in the page that will open next.
+(ansi yellow_bold)Sign Up(ansi reset) for a free Neon account in the page that just opened.
 (ansi yellow_bold)Stop(ansi reset) at the (ansi yellow_bold)Quickstart(ansi reset) section of onboarding \(we will go through the setup later\).
 Press (ansi yellow_bold)any key(ansi reset) to continue.
 "
-    input
     start "https://neon.tech"
-
     print $"
-Click the (ansi yellow_bold)Connect to GitHub(ansi reset), followed by (ansi yellow_bold)Install GitHub App(ansi reset) in the page that will open next.
-Follow the on-screen instructions for the rest of the setup.
-It's enough to authorize only the (ansi yellow_bold)neon-demo(ansi reset) repo. .
 Press (ansi yellow_bold)any key(ansi reset) to continue.
 "
     input
+
+    print $"
+Click the (ansi yellow_bold)Connect to GitHub(ansi reset), followed by (ansi yellow_bold)Install GitHub App(ansi reset) in the page that just opened.
+Follow the on-screen instructions for the rest of the setup.
+It's enough to authorize only the (ansi yellow_bold)neon-demo(ansi reset) repo. .
+"
     start "https://console.neon.tech/app/settings/api-keys"
+    print $"
+Press (ansi yellow_bold)any key(ansi reset) to continue.
+"
+    input
 
     neonctl auth
 
@@ -130,7 +145,7 @@ Press (ansi yellow_bold)any key(ansi reset) to continue.
     let main_branch = neonctl branches list
     $"export NEON_ROLE=($neon_role)\n" | save --append .env
 
-    psql --dbname $(neonctl connection-string) --file lego.sql
+    psql --dbname $"(neonctl connection-string)" --file lego.sql
 
     (
         yq --inplace
