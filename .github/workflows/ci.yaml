@@ -17,7 +17,8 @@ jobs:
         uses: actions/checkout@v4
       - id: setup-qemu
         uses: docker/setup-qemu-action@v3
-      # - name: login-to-ghcr
+      - name: login-to-ghcr
+        run: echo "Faking it to avoid you having to create a secret with Registry authentication"
       #   uses: docker/login-action@v3
       #   with:
       #     registry: ghcr.io
@@ -27,11 +28,13 @@ jobs:
         uses: jetify-com/devbox-install-action@v0.12.0
       - id: run-unit-tests
         run: devbox run -- ./dot.nu run unit_tests
-      # - name: build-image
+      - name: build-image
+        run: echo "Faking it to avoid you having to create a secret with Registry authentication"
       #   run: devbox run -- ./dot.nu build image $TAG
       #   env:
       #     REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      # - name: update-manifests
+      - name: update-manifests
+        run: echo "Faking it to avoid you having to create secrets with Cosign and Registry authentication"
       #   run: devbox run -- ./dot.nu update manifests $TAG
       #   env:
       #     COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
@@ -57,13 +60,15 @@ jobs:
         run: devbox run -- ./dot.nu deploy app ${{ steps.create-neon-branch.outputs.db_url }}
       - id: run-integration-tests
         run: devbox run -- ./dot.nu run integration_tests ${{ steps.create-neon-branch.outputs.db_url }}
-      # - name: commit-changes
+      - name: commit-changes
+        run: echo "Faking it since we faked previous tasks that modified files"
       #   run: |
       #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
       #     git config --local user.name "github-actions[bot]"
       #     git add .
       #     git commit -m "Release ${{ env.TAG }} [skip ci]"
-      # - name: push-changes
+      - name: push-changes
+        run: echo "Faking it since we faked previous tasks that modified files"
       #   uses: ad-m/github-push-action@master
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
