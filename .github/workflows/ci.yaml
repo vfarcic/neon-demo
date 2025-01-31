@@ -40,14 +40,14 @@ jobs:
       #     COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
       #     COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
       #     REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      - id: delete-neon-branch
+      - id: delete-database
         uses: neondatabase/delete-branch-action@v3
         continue-on-error: true
         with:
           project_id: super-darkness-76149530
           branch: silly-demo/${{ github.event.number }}
           api_key: ${{ secrets.NEON_API_KEY }}
-      - id: create-neon-branch
+      - id: create-database
         uses: neondatabase/create-branch-action@v5
         with:
           project_id: super-darkness-76149530
@@ -57,9 +57,9 @@ jobs:
           username: dot_owner
           api_key: ${{ secrets.NEON_API_KEY }}
       - id: deploy-app
-        run: devbox run -- ./dot.nu deploy app ${{ steps.create-neon-branch.outputs.db_url }}
+        run: devbox run -- ./dot.nu deploy app ${{ steps.create-database.outputs.db_url }}
       - id: run-integration-tests
-        run: devbox run -- ./dot.nu run integration_tests ${{ steps.create-neon-branch.outputs.db_url }}
+        run: devbox run -- ./dot.nu run integration_tests ${{ steps.create-database.outputs.db_url }}
       - name: commit-changes
         run: echo "Faking it since we faked previous tasks that modified files"
       #   run: |
