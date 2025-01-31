@@ -10,6 +10,10 @@ def main [] {}
 
 def "main setup" [] {
 
+    rm --force .env
+    
+    setup neon
+
     main create kubernetes kind 
 
     main apply ingress nginx --hyperscaler kind
@@ -78,6 +82,79 @@ def "main run integration_tests" [
     $env.DB_CONN = $neon_conn
     
     go test -v -tags integration
+
+}
+
+def "setup neon" [] {
+
+    print $"
+(ansi yellow_bold)Sign Up(ansi reset) for a free Neon account in the page that will open next.
+(ansi yellow_bold)Stop(ansi reset) at the (ansi yellow_bold)Quickstart(ansi reset) section of onboarding \(we will go through the setup later\).
+Press (ansi yellow_bold)any key(ansi reset) to continue.
+"
+    input
+    start "https://neon.tech"
+
+    print $"
+Click the (ansi yellow_bold)Connect to GitHub(ansi reset), followed by (ansi yellow_bold)Install GitHub App(ansi reset) in the page that will open next.
+Follow the on-screen instructions for the rest of the setup.
+It's enough to authorize only the (ansi yellow_bold)neon-demo(ansi reset) repo. .
+Press (ansi yellow_bold)any key(ansi reset) to continue.
+"
+    input
+    start "https://console.neon.tech/app/settings/api-keys"
+
+    neonctl auth
+
+    (
+        http get
+            https://raw.githubusercontent.com/neondatabase/postgres-sample-dbs/main/lego.sql
+            | save lego.sql
+    )
+
+    let neon_project_id = neonctl projects list --output yaml | yq ".projects[0].id"
+    $"export NEON_PROJECT_ID=($neon_project_id)\n" | save --append .env
+
+    let neon_db = "dot_neon"
+    $"export NEON_DB=($neon_db)\n" | save --append .env
+
+    neonctl databases create --name $neon_db
+
+    let neon_role = (
+        neonctl roles list --output yaml
+            | from yaml
+            | get 0.name
+    )
+    $"export NEON_ROLE=($neon_role)\n" | save --append .env
+
+    let main_branch = neonctl branches list
+    $"export NEON_ROLE=($neon_role)\n" | save --append .env
+
+    psql --dbname $(neonctl connection-string) --file lego.sql
+
+    (
+        yq --inplace
+            $".jobs.ci.steps[7].with.project_id = \"($neon_project_id)\""
+            .github/workflows/ci.yaml
+    )
+
+    (
+        yq --inplace
+            $".jobs.ci.steps[8].with.project_id = \"($neon_project_id)\""
+            .github/workflows/ci.yaml
+    )
+
+    (
+        yq --inplace
+            $".jobs.ci.steps[8].with.database = \"($neon_db)\""
+            .github/workflows/ci.yaml
+    )
+
+    (
+        yq --inplace
+            $".jobs.ci.steps[8].with.username = \"($neon_role)\""
+            .github/workflows/ci.yaml
+    )
 
 }
 
