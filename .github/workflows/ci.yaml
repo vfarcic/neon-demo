@@ -53,12 +53,6 @@ jobs:
           branch_name: silly-demo/${{ github.event.number }}
           username: dot_owner
           api_key: ${{ secrets.NEON_API_KEY }}
-      # FIXME: Remove
-      - id: branch-info
-        run: |
-          echo db_url: ${{ steps.create-neon-branch.outputs.db_url }}
-          echo host: ${{ steps.create-neon-branch.outputs.host }}
-          echo branch_id: ${{ steps.create-neon-branch.outputs.branch_id }}
       - id: deploy-app
         run: devbox run -- ./dot.nu deploy app ${{ steps.create-neon-branch.outputs.db_url }}
       - id: run-integration-tests
