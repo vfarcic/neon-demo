@@ -30,6 +30,14 @@ def "main destroy" [
     --neon_db = "dot_neon"
 ] {
 
+    rm --force empty
+
+    git add .
+
+    git commit -m "Reset"
+
+    git push
+
     main destroy kubernetes kind
 
     neonctl databases delete $neon_db
