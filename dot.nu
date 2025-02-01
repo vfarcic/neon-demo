@@ -142,9 +142,6 @@ Press (ansi yellow_bold)any key(ansi reset) to continue.
     )
     $"export NEON_ROLE=($neon_role)\n" | save --append .env
 
-    let main_branch = neonctl branches list
-    $"export NEON_ROLE=($neon_role)\n" | save --append .env
-
     psql --dbname $"(neonctl connection-string)" --file lego.sql
 
     (
