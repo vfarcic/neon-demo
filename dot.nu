@@ -108,12 +108,9 @@ def "setup neon" [] {
     print $"
 (ansi yellow_bold)Sign Up(ansi reset) for a free Neon account in the page that just opened.
 (ansi yellow_bold)Stop(ansi reset) at the (ansi yellow_bold)Quickstart(ansi reset) section of onboarding \(we will go through the setup later\).
-Press (ansi yellow_bold)any key(ansi reset) to continue.
 "
     start "https://neon.tech"
-    print $"
-Press (ansi yellow_bold)any key(ansi reset) to continue.
-"
+    print $"Press (ansi yellow_bold)any key(ansi reset) to continue."
     input
 
     print $"
@@ -122,9 +119,7 @@ Follow the on-screen instructions for the rest of the setup.
 It's enough to authorize only the (ansi yellow_bold)neon-demo(ansi reset) repo. .
 "
     start "https://console.neon.tech/app/settings/api-keys"
-    print $"
-Press (ansi yellow_bold)any key(ansi reset) to continue.
-"
+    print $"Press (ansi yellow_bold)any key(ansi reset) to continue."
     input
 
     neonctl auth
@@ -132,7 +127,7 @@ Press (ansi yellow_bold)any key(ansi reset) to continue.
     (
         http get
             https://raw.githubusercontent.com/neondatabase/postgres-sample-dbs/main/lego.sql
-            | save lego.sql
+            | save lego.sql --force
     )
 
     let neon_project_id = neonctl projects list --output yaml | yq ".projects[0].id"

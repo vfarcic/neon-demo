@@ -69,7 +69,7 @@ jobs:
       #     git commit -m "Release ${{ env.TAG }} [skip ci]"
       - name: push-changes
         run: echo "Faking it since we faked previous tasks that modified files"
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: ${{ github.ref }}
+    #   uses: ad-m/github-push-action@master
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     branch: ${{ github.ref }}
