@@ -10,8 +10,6 @@ jobs:
     env:
       FORCE_COLOR: 1
     steps:
-      - id: checkout
-        uses: actions/checkout@v4
       - id: delete-neon-branch
         uses: neondatabase/delete-branch-action@v3
         continue-on-error: true
